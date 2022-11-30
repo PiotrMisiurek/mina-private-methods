@@ -44,6 +44,16 @@ import {
   console.log('Incremented secret: ' + incrementedSecret.toString());
   incrementedSecret.assertEquals(Poseidon.hash([salt, secretToInit.add(1)]));
 
+  try {
+    const wrongSecretTxn = await Mina.transaction(deployerAccount, () => {
+      zkAppInstance.incrementSecret(salt, secretToInit);
+      zkAppInstance.sign(zkAppPrivateKey);
+    });
+    await wrongSecretTxn.send();
+  } catch (err: any) {
+    console.log('Wrong secret: ' + err.message);
+  }
+
   console.log('well done, bye bye');
   await shutdown();
 })();
