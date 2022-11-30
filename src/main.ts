@@ -54,6 +54,17 @@ import {
     console.log('Wrong secret: ' + err.message);
   }
 
+  try {
+    const wrongSaltTxn = await Mina.transaction(deployerAccount, () => {
+      const wrongSalt = salt.add(1);
+      zkAppInstance.incrementSecret(wrongSalt, secretToInit.add(1));
+      zkAppInstance.sign(zkAppPrivateKey);
+    });
+    await wrongSaltTxn.send();
+  } catch (err: any) {
+    console.log('Wrong salt : ' + err.message);
+  }
+
   console.log('well done, bye bye');
   await shutdown();
 })();
