@@ -31,8 +31,8 @@ import {
   });
   await deployTxn.send();
 
-  const initialSecret = zkAppInstance.secret.get();
-  console.log('Initial secret: ', initialSecret.toString());
+  const initialSecretHash = zkAppInstance.secret.get();
+  console.log('Initial secret: ', initialSecretHash.toString());
 
   const incrementSecretTxn = await Mina.transaction(deployerAccount, () => {
     zkAppInstance.incrementSecret(salt, secretToInit);
